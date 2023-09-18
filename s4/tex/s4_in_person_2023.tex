@@ -14,7 +14,7 @@
 \usepackage{tcolorbox}
 \usepackage{color}
 \definecolor{editorGray}{rgb}{0.95, 0.95, 0.95}
-
+\usepackage{xcolor}
 
 \lstset{%
     % Basic design
@@ -80,7 +80,9 @@ Our goals for this section:
 \end{enumerate}
 
 \section{Point to point motion around obstacles}
+\subsection*{Setup}
 % students should have a git repo with their section group that they develop
+\color{blue}
 Before starting this section, please clone your group's workspace repository into the \texttt{~/my\_ws/src/} directory and build the workspace:
 \begin{lstlisting}
 cd ~/my_ws/src/
@@ -88,6 +90,7 @@ git clone <your repo>
 colcon build
 \end{lstlisting}
 
+\color{black}
 % pull and clean the \texttt{~/tb\_ws/src/asl-tb3-utils} repository in the computer:
 % \begin{lstlisting}
 % git pull
@@ -114,51 +117,59 @@ A key ability of autonomous agents is the ability to navigate from point to poin
 
 
 %Next
-Open \texttt{scripts/navigator.py} within the \texttt{asl\_turtlebot} catkin package in a text editor, read the provided code, and think about how the node works.
+{\color{blue}
+We will be using the code you wrote in HWX and HWX to get the turtlebot to navigate through its environment in hardware! Copy the files \texttt{navigator.py} and \texttt{pose\_stabilizer.py} (will change) from HWX and HWX to the folder \texttt{~/my\_ws/src/scripts} on the AA274 laptop. 
+}
+
+\subsection*{ROS Topics and State Machine}
+\color{blue}
+Open \texttt{scripts/navigator.py}, read the code, including the helper functions in \\ \texttt{~/tb\_ws/src/asl-tb3-utils/asl\_tb3\_lib/asl\_tb3\_lib/navigation.py} and think about how the node works.
 
 \textbf{Problem 1: What topics does the navigator subscribe to? What is the purpose of each of these topics? What topics does it publish to, and why?}
+\newline
+\newline 
+The navigator uses a state machine to switch between different modes of operation. Carefully read the function \texttt{compute\_control} in \texttt{~/tb\_ws/src/asl-tb3-utils/asl\_tb3\_lib/asl\_tb3\_lib/navigation.py}.
 
-The navigator uses a state machine to switch between different modes of operation. Carefully read the functions \texttt{run} and \texttt{publish\_control}.
-
+\color{black}
 \textbf{Problem 2: Describe what each mode of the state machine does, and intuitively when the node switches between modes.}
 
 You may have noticed that the code logic is similar to the strategy we used in HW2: planning around obstacles using A*, and using a combination of the pose controller and tracking controller to track the planned path. In fact, this code calls functions that you wrote in your previous homeworks. 
 \\
-\textbf{NOTE}: The navigator node can be run from the robot \textit{or} from the aa274 laptop(preferred). Choose which device will be running the navigator, and copy files over accordingly.
+% \textbf{NOTE}: The navigator node can be run from the robot \textit{or} from the aa274 laptop(preferred). Choose which device will be running the navigator, and copy files over accordingly.
 
-Copy over the following files to \texttt{asl\_turtlebot/scripts/controllers/}
+% 2023: Below commented our is already done in setup
+% Copy over the following files to \texttt{tb\_ws/scripts/}
 
-\begin{lstlisting}
-P2_pose_stabilization.py
-P3_trajectory_tracking.py
-\end{lstlisting}
+% \begin{lstlisting}
+% P2_pose_stabilization.py (will change)
+% P3_trajectory_tracking.py
+% \end{lstlisting}
 
-and the following from HW2 to \texttt{asl\_turtlebot/scripts/planners/}
+% and the following from HW2 to \texttt{asl\_turtlebot/scripts/planners/}
 
-\begin{lstlisting}
-P1_astar.py
-\end{lstlisting}
+% \begin{lstlisting}
+% P1_astar.py
+% \end{lstlisting}
 
-You will also need to make some small modification to {\tt P1\_astar.py}. Find and replace the initialization of two variables as following, and test it locally(on your own computer, with \texttt{resolution = 0.1}) to make sure it is working as expected.
+% dont think we need the commented out stuff below
+% You will need to make some small modification to {\tt navigator.py} in the {\tt A\_star} class. 
+% Find and replace the initialization of two variables as following, and test it locally(on your own computer, with \texttt{resolution = 0.1}) to make sure it is working as expected.
+% \begin{lstlisting}
+% self.est_cost_through = {}
+% self.cost_to_arrive = {}
+% \end{lstlisting}
 
-\begin{lstlisting}
-self.est_cost_through = {}
-self.cost_to_arrive = {}
-\end{lstlisting}
-
-Also, edit \texttt{scripts/planners/path\_smoother.py} and copy over the function \texttt{compute\_smoothed\_traj} from HW2's \texttt{P3\_traj\_planning.py}.
+% Also, edit \texttt{scripts/planners/path\_smoother.py} and copy over the function \texttt{compute\_smoothed\_traj} from HW2's \texttt{P3\_traj\_planning.py}.
 
 %\textbf{For SCPD students:} 
-If you need to, use the \texttt{scp} command to copy these files to the robot. An alternative is to use VScode Remote extension to log into robot and modify it directly on robot.
+% If you need to, use the \texttt{scp} command to copy these files to the robot. An alternative is to use VScode Remote extension to log into robot and modify it directly on robot.
 
+% \begin{lstlisting}
+% # Below, you need replace "henry" with the name of your robot 
+% # and fill in the '...' with the correct file path!
+% scp <file> aa274@henry.local:~/catkin_ws/src/asl_turtlebot/scripts/...
+% \end{lstlisting}
 
-\begin{lstlisting}
-# Below, you need replace "henry" with the name of your robot 
-# and fill in the '...' with the correct file path!
-scp <file> aa274@henry.local:~/catkin_ws/src/asl_turtlebot/scripts/...
-\end{lstlisting}
-
-Now, we're ready to test the framework on the robot!
 
 % \subsection{On Campus Students}
 % Power on the robot, and have one person in your group ssh into it.
@@ -177,21 +188,28 @@ Now, we're ready to test the framework on the robot!
 % Again, only one navigator should be running per robot, so take turns to test your code!
 
 % \subsection{SCPD Students}
+
+\section{Running the Navigator}
+Now, we're ready to test the framework on the robot!
 On the robot (i.e. after ssh-ing in the robot), run
 
 \begin{lstlisting}
-roslaunch asl_turtlebot asl_turtlebot_core.launch
+ros2 launch asl-tb3-driver bringup.launch.py
 \end{lstlisting}
 
-Then, in a new terminal (after running \texttt{rostb3} or ssh-ing into the robot, depending on where you've copied your navigator code), run
+Then, in a new terminal after ssh-ing into the robot, run
 
 \begin{lstlisting}
-rosrun asl_turtlebot navigator.py
+ros2 run tb_ws navigator.py
 \end{lstlisting}
 
-\section{Running the Navigator}
+% KN: assume we've already created the rviz file and saved it in our git repo
+Next, we'll open our saved rviz configuration from last week's section. From a new terminal, %open \texttt{rviz}. 
+\begin{lstlisting}
+ros2 launch asl-tb3-sim navigator.py
+\end{lstlisting}
 
-From a new terminal, open \texttt{rviz}. 
+
 % As before, if using docker, run the following command from the \texttt{aa274-docker} directory.
 % \begin{minted}{bash}
 % ./run.sh --display 1 --rosmaster <lowercase_robot_name>.local rviz

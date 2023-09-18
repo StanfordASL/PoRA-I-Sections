@@ -82,21 +82,32 @@
 
 Our goals for this section:
 \begin{enumerate}
-    \item Learn useful workstation commands.
-    \item Learn how group login accounts will work for the rest of the class. 
-    \item Gain a basic understanding of the Robot Operating System (ROS) by implementing classes, nodes, and topics. Use catkin build tools and other commands to interact with ROS through the terminal.
+    \item Learn the basic functionality of the Robot Operating System (ROS). 
+    \item Create a basic ROS package, and understand file structure.
+    \item Implement a basic ROS node that sends constant commands to a Turtlebot.
 \end{enumerate}
 
-% \textbf{NOTE}: The commands below were written from the perspective of a Ubuntu user. If you are using the VMware VM then these commands should work within it. If you are using Docker then remember to use the \texttt{run.sh} script from last section to run the ROS commands. Also, be mindful of the paths you use to execute files (keep in mind Docker's remapping of directories).
-
-To obtain the code for this section, navigate to your section directory from last time, and execute the following
-
+TODO: SECTION GIT INSTRUCTIONS HERE
 \begin{lstlisting}
-git pull
+GIT COMMANDS
 \end{lstlisting}
 
-\input{sec_problem2}
+\section{Creating a ROS workspace}
+A ROS Development Workspace is a directory that is used to organize packages that extend the basic functionality of ROS. Use the following commands to create a ROS workspace.
 
-\input{sec_problem1}
+\begin{lstlisting}
+    mkdir tb_ws         # Make a directory tb_ws
+    cd tb_ws            # Change into that directory 
+    mkdir src           # Make a new sub-directory src
+\end{lstlisting}
+
+
+
+\section{Creating a basic ROS Package}
+ROS is a complex software-framework, and building ROS code can be difficult. To solve this problem ROS code is typically organized into packages, which are directories that contain a specific set of files and sub-directories. When code is organized into a package it can be built with ROS's build tool, {\it colcon}. Building a package links the local code to external libraries and other ROS infrastructure, complies any C++ code (for this course we'll stick to python), and creates executables for python code. 
+\begin{lstlisting}
+    
+\end{lstlisting}
+
 
 \end{document}
