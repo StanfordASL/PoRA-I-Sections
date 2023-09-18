@@ -96,10 +96,18 @@ GIT COMMANDS
 A ROS Development Workspace is a directory that is used to organize packages that extend the basic functionality of ROS. Use the following commands to create a ROS workspace.
 
 \begin{lstlisting}
-    mkdir tb_ws         # Make a directory tb_ws
+    mkdir tb_ws         # Make a new directory ~/tb_ws
     cd tb_ws            # Change into that directory 
-    mkdir src           # Make a new sub-directory src
+    mkdir src           # Make a new sub-directory ~/tb_ws/src
 \end{lstlisting}
+
+Now that we have a basic file structure we can use ROS's build tool, {\it colcon}, to generate the rest of the core workspace files and folders. 
+
+\begin{lstlisting}
+    colcon build        # This command should be run in ~/tb_ws
+\end{lstlisting}
+
+After running that command you should see a message ``\texttt{Summary: 0 packages finished}", and should have some new folders in your workspace (you can use \texttt{ls} to verify this).
 
 
 

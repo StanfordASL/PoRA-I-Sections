@@ -196,8 +196,9 @@ we focus on two scripting languages, Python and Shell, which you will use the mo
 to build up your robot autonomy stack.
 
 \subsection{Shell}
-See \href{https://en.wikipedia.org/wiki/Shell_script}{Wikipedia} for some histories. In
-short, this is the default language to interface with most UNIX terminal environments.
+See \href{https://en.wikipedia.org/wiki/Shell_script}{Wikipedia} for some histories 
+of the shell language. In short, this is the default language to interface with most 
+UNIX terminal environments.
 
 {\bf Task 3.1.1 -- Create a setup script.} Create a shell script at \code{$\sim$/scripts/setup.sh}
 and put the following shebang to the top of the file
@@ -226,9 +227,25 @@ TODO...
 
 
 \subsection{Python}
-For each of the following tasks, create a Python file under \code{<repo>/scripts} directory.
+For each of the following tasks, 
+\begin{enumerate}
+\item Create a Python file under \code{<repo>/scripts} directory.
+
+\item Make sure to also add the following shebang to the top of each Python file.
+\begin{lstlisting}[language=sh, numbers=none]
+#!/usr/bin/env python3
+\end{lstlisting}
+
+\item Change the permission of the file to make it an executable.
+
+    Hint: use \code{chmod}.
+\end{enumerate}
+
 
 {\bf Task 3.2.1 -- \code{numpy\_broadcast.py}.}
-{\bf Task 3.2.2 -- \code{scipy\_integration.py}.}
+
+{\bf Task 3.2.2 -- \code{matplotlib\_viz.py}.}
+
+TODO: description of each task
 
 \end{document}
