@@ -1,0 +1,104 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{bbm}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage[margin=1cm]{caption}
+\usepackage{subcaption}
+\usepackage{tcolorbox}
+\usepackage{color}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=blue,
+}
+\definecolor{editorGray}{rgb}{0.95, 0.95, 0.95}
+
+
+\lstset{%
+    % Basic design
+    backgroundcolor=\color{editorGray},
+    basicstyle={\small\ttfamily},   
+    frame=l,
+    % Line numbers
+    xleftmargin={0.75cm},
+    numbers=left,
+    stepnumber=1,
+    firstnumber=1,
+    numberfirstline=false,
+    }
+\lstset{
+    literate={~} {$\sim$}{1}
+}
+
+\newenvironment{claim}[1]{\par\noindent\underline{Claim:}\space#1}{}
+\newenvironment{claimproof}[1]{\par\noindent\underline{Proof:}\space#1}{\hfill $\blacksquare$}
+
+\oddsidemargin 0in \evensidemargin 0in
+\topmargin -0.5in \headheight 0.25in \headsep 0.25in
+\textwidth 6.5in \textheight 9in
+\parskip 6pt \parindent 0in \footskip 20pt
+
+% set the header up
+\fancyhead{}
+\fancyhead[L]{Stanford Aeronautics \& Astronautics}
+\fancyhead[R]{Fall 2021}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand\headrulewidth{0.4pt}
+\setlength\headheight{15pt}
+
+\usepackage{outlines}
+
+\usepackage{xparse}
+\NewDocumentCommand{\codeword}{v}{%
+\texttt{\textcolor{blue}{#1}}%
+}
+\usepackage{gensymb}
+
+\newcommand{\ssmargin}[2]{{\color{blue}#1}{\marginpar{\color{blue}\raggedright\scriptsize [SS] #2 \par}}}
+
+
+\setlength{\parindent}{0in}
+
+\title{AA 274A: Principles of Robot Autonomy I \\ Section 3 (In-person): Introduction to Turtlebot Hardware and Gazebo}
+\date{}
+
+\begin{document}
+
+\maketitle
+\pagestyle{fancy}
+
+Our goals for this section: 
+\begin{enumerate}
+	\item Become familiar with the Turtlebot hardware.
+	\item Gain a basic understanding of the Turtlebot software.
+	\item Use basic tools for interacting with the Turtlebot.
+\end{enumerate}
+
+\input{sec_turtlebot_hw}
+
+\input{sec_turtlebot_sw}
+
+\input{sec_turtlebot_teleop}
+
+\section{Hardware Shutdown}
+When you have completed all of the hardware tasks, run the following commands in your ssh-ed terminal window:
+\begin{lstlisting}
+# run this command on the robot
+sudo shutdown -h now
+\end{lstlisting}
+with the same password you used to log in: \texttt{aa274}. This should log out all windows that were ssh-ed into the robot. Wait 4-5 seconds, then flip the power switch on the powerboard to "OFF".
+
+\input{sec_turtlebot_genbu_addon}
+
+
+\end{document}
