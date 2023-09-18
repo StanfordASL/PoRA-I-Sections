@@ -16,26 +16,27 @@
 \usepackage{color}
 \definecolor{editorGray}{rgb}{0.95, 0.95, 0.95}
 \hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    filecolor=magenta,      
-    urlcolor=blue,
+  colorlinks=true,
+  linkcolor=blue,
+  filecolor=magenta,
+  urlcolor=blue,
 }
 
 \lstset{%
-    % Basic design
-    backgroundcolor=\color{editorGray},
-    basicstyle={\small\ttfamily},   
-    frame=l,
-    % Line numbers
-    xleftmargin={0.75cm},
-    numbers=left,
-    stepnumber=1,
-    firstnumber=1,
-    numberfirstline=false,
-    }
+  % Basic design
+  backgroundcolor=\color{editorGray},
+  basicstyle={\small\ttfamily},
+  commentstyle=\color{teal},
+  keywordstyle=\color{orange},
+  frame=single,
+  % Line numbers
+  xleftmargin={0.75cm},
+  numbers=left,
+  stepnumber=1,
+  firstnumber=1,
+}
 \lstset{
-    literate={~} {$\sim$}{1}
+  literate={~} {$\sim$}{1}
 }
 
 \newenvironment{claim}[1]{\par\noindent\underline{Claim:}\space#1}{}
@@ -49,7 +50,7 @@
 % set the header up
 \fancyhead{}
 \fancyhead[L]{Stanford Aeronautics \& Astronautics}
-\fancyhead[R]{Fall 2021}
+\fancyhead[R]{Autumn 2023 - 2024}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \renewcommand\headrulewidth{0.4pt}
@@ -58,9 +59,7 @@
 \usepackage{outlines}
 
 \usepackage{xparse}
-\NewDocumentCommand{\codeword}{v}{%
-\texttt{\textcolor{blue}{#1}}%
-}
+\def\code#1{\texttt{\color{magenta} #1}}
 \usepackage{gensymb}
 
 \newcommand{\ssmargin}[2]{{\color{blue}#1}{\marginpar{\color{blue}\raggedright\scriptsize [SS] #2 \par}}}
@@ -68,7 +67,7 @@
 
 \setlength{\parindent}{0in}
 
-\title{Principles of Robotic Autonomy \\ Section 1: OS Setup, Git, Python}
+\title{Principles of Robotic Autonomy \\ Section 1: UNIX, Git, Python}
 \date{}
 
 \begin{document}
@@ -77,64 +76,159 @@
 \pagestyle{fancy}
 
 Our goals for this section: \begin{enumerate}
-    \item Learn to navigate in UNIX OS with terminal commands.
-    \item Learn to use Git to track .
-    \item Start working with Python and Jupyter.
+  \item Learn to navigate in a UNIX OS with terminal commands.
+  \item Learn to use Git to create and track software development.
+  \item Learn to write Python and Shell executables.
 \end{enumerate}
 
-\section{OS Setup}
-For this class, we recommend natively installing Python 3.8 on your local operating system. For the first two homeworks, there will be no ROS component and you should be able to develop and test code locally on your machine. For later homeworks, you will be accessing ROS on a server that we've set up for the class.
+\section{Working with UNIX Terminal}
 
-% \emph{Windows users: }If you use Windows 10, then please look into using the Windows Linux Subsystem (WSL) option that provides native Linux tools directly on Linux. 
+Complete the following tasks using terminal commands only. Don't use the graphical
+interface and save those commands (in your mind) as you will need them later.
 
-A second option is to natively install Linux alongside your normal OS as a dual boot. This may give better performance, especially for graphics rendering. % However, as there can be driver issues and other edge cases that can come up when installing Linux on hardware, we can only officially support the VM in terms of providing help with your setup.
+{\bf Task 1.1 -- Cleanup.} Remove directory \code{$\sim$/autonomy\_ws} if they exist. This
+might come from a previous section.
 
-% A third option is to install a Linux virtual machine (VM) using the instructions found  \href{https://docs.google.com/document/d/1ley_pauriyx0PrH8XYfkIrZwXnL3s-xBQvcUY6RE02I/edit#}{here}. Do note that the performance of a VM won't be as snappy or responsive as a dual boot.
+{\bf Task 1.2 -- Create workspace.} Pick a name for the directory that would host your robot
+autonomy code in the future. For the reset of this document, we use \code{<repo>} to
+denote the directory name you chose. Create a nested directory at
+\code{$\sim$/autonomy\_ws/src/<repo>}.
 
-% As a final option, you can consider logging in remotely to Stanford FarmShare. You can find information on how to log in securely \href{https://srcc.stanford.edu/farmshare2/connecting}{here}. Because you'll be logged in remotely, there'll be a few additional steps required to transfer files back-and-forth and to locally render a Jupyter notebook running remotely.
+{\bf Task 1.3 -- Add a README.} Create a \code{README.md} file in \code{<repo>} you
+just created, and add a title to it. For example
+\begin{lstlisting}[numbers=none]
+# We Build Autonomous Robots
+\end{lstlisting}
+Hint: you may use your favorite code editing software to edit the README file.
+For example, you can launch VSCode to edit any file with the following command,
+\begin{lstlisting}[language=sh, numbers=none]
+code <path>/<to>/<file>
+\end{lstlisting}
+Other code editing software works as well, e.g. \code{vim}, \code{nano}, \code{emacs}, etc.
+
+{\bf Cheat Sheets}
+\begin{enumerate}
+\item {\bf Special Directories}
+\begin{lstlisting}[language=sh]
+~   # home directory
+.   # current directory
+..  # parent directory
+/   # root directory
+\end{lstlisting}
+
+\item {\bf File System Commands}
+\begin{lstlisting}[language=sh]
+pwd             # print out the current working directory
+ls              # list all files and sub-directories under pwd
+ls -l <file>    # show permissions (read, write, executable) of <file>
+cd <dir>        # change current directory to <dir>
+mkdir <dir>     # create a single directory at <dir>
+mkdir -p <dir>  # create a possibly nested directory at <dir>
+mv <A> <B>      # rename file <A> to file <B>
+cp <A> <B>      # copy file <A> to file <B>
+rm <file>       # remove a single <file>
+rm -r <dir>     # remove a directory <dir> and everything in it
+rm -rf <dir>    # same as above but also work if <dir> does not exist
+touch <file>    # create an empty <file>
+chmod +x <file> # make <file> executable
+chmod -w <file> # make <file> read-only
+cat <file>      # print all the content of <file>
+du -sh <dir>    # show total size of directory <dir>
+\end{lstlisting}
+\end{enumerate}
 
 \section{Using Git}
-Git is a source control tool that allows us to share code with you. To obtain code for this section, type the following into your terminal:
+Git is a source control tool that allows people to share code with each other, and more
+importantly, keep track of a history of code changes for any type of software development.
+We will guide you through creating a Git repository and share with you some common workflows
+when working collaboratively with multiple people on the same repository.
 
- \begin{lstlisting}[escapechar=|]
- git clone https://github.com/PrinciplesofRobotAutonomy/AA274A_SECTIONS.git
-\end{lstlisting}
-For the sake of time, if you have trouble installing Git locally, then we suggest that you simply download the zip file for the repository off of the same website. By next week's section, please try and have Git installed.
+{\bf Task 2.1 -- Create a Github account.} Go to \url{https://github.com} and create an
+account with your university email if you have not yet done so before.
 
-You will use this folder to store all section material for the remainder of the class. So, to update this repo at the start of each section, type: 
+{\bf Task 2.2 -- Setup a Github repository.} Create a new repository with the
+name \code{<repo>} you picked earlier. Follow the guide on you newly created Github project page
+to initialize \code{$\sim$/autonomy\_ws/src/<repo>} as a git repository and push the README
+to Github.
 
- \begin{lstlisting}
- git pull
-\end{lstlisting}
+{\bf Task 2.3 -- Add collaborators.} Go to project setting in Github and add your teammates
+as collaborators to the repository you just created.
 
-
-\section{Python}
-Since our class is composed of students from AA, EE/ME, and CS, we will not assume that you have comprehensive Python knowledge. Therefore, the main purpose of this section is to get your Python coding skills spun up so you can work on the homework. If you know this material already, please help someone who doesn't know it as well. To get started, first install a version of Python 3.8 on your local machine. 
-
-In order to complete this part of our section, please switch to the scripts included in the code for this section.
-
-%  \begin{lstlisting}
-% ./run.sh python
-% \end{lstlisting}
-
-Once you have had a look through the code, played around with Python a bit, and are aware of the capabilities that Python and its packages offer, complete the following problems:
-{\bf
+{\bf Task 2.4 -- Add group info by creating a PR.} Use the following steps as a guide
 \begin{enumerate}
-\item Define a $\sin$ function using NumPy
-\item Find the minimum of the function using SciPy
-\item Integrate the function from $[0, 1]$ using SciPy
-\item Plot the function using Matplotlib from $[0, 2\pi]$
+  \item Create a new branch.
+  \item Add a new file named \code{team.txt} and edit it to include all SUNetIDs of
+    your team members (separated by newlines).
+  \item Commit and push the new file to the new branch.
+  \item Create a pull request from the Github project page
+  \item Review the changes and merge it back to \code{main} branch.
 \end{enumerate}
-}
-Once you have done this, please submit your results \textit{and code} in one writeup file on Gradescope.
 
-\section{Jupyter}
-As the final module in this section, we'll be installing Jupyter notebook, an interactive browser-based platform to run scripts and more easily visualize and develop code. You can install Jupyter \href{https://jupyter.org/}{here}. To make sure it's working, simply run:
-
- \begin{lstlisting}[escapechar=|]
- jupyter notebook
+{\bf Cheat Sheets}
+\begin{enumerate}
+\item {\bf Generic.}
+\begin{lstlisting}[language=sh]
+git fetch             # sync remote branch (does not change local files)
+git pull              # sync remote branch and also update local files
+git clone <url>       # clone git repo from <url> to the current directory
+git checkout <branch> # switch to <branch>
 \end{lstlisting}
 
-Jupyter should rely on a Python 3 kernel, but if you have multiple Python versions installed make sure to set the kernel to the right version. 
+\item {\bf On \code{main} branch.}
+\begin{lstlisting}[language=sh]
+git checkout -b <branch>  # create a new feature branch named <branch>
+\end{lstlisting}
+
+\item {\bf On a feature branch.}
+\begin{lstlisting}[language=sh]
+git add .                   # add all files in the current directory
+git add -u                  # add all tracked files
+git commit -m "<some msg>"  # commit all added changes to the local branch
+git push -u origin <branch> # 1st push on a newly created local branch
+git push                    # push commited changes to Github
+git merge origin/main       # sync with the latest main branch
+\end{lstlisting}
+\end{enumerate}
+
+\section{Executables}
+All executables (or apps) are just files with the \code{x} permission turned on. Here
+we focus on two scripting languages, Python and Shell, which you will use the most
+to build up your robot autonomy stack.
+
+\subsection{Shell}
+See \href{https://en.wikipedia.org/wiki/Shell_script}{Wikipedia} for some histories. In
+short, this is the default language to interface with most UNIX terminal environments.
+
+{\bf Task 3.1.1 -- Create a setup script.} Create a shell script at \code{$\sim$/scripts/setup.sh}
+and put the following shebang to the top of the file
+\begin{lstlisting}[language=sh, numbers=none]
+#!/usr/bin/sh
+\end{lstlisting}
+The shebang is to tell the OS the find the correct shell interpreter when executing it.
+
+{\bf Task 3.1.2 -- Write the setup script.} This script will be used to quickly setup
+your ROS2 workspace at the beginning of future sections. Edit \code{setup.sh} to achieve
+the following functionalities:
+
+\begin{enumerate}
+\item Login to your Github account -- you can add the following line to your shell script
+\begin{lstlisting}[language=sh, numbers=none]
+gh auth login -w -p https
+\end{lstlisting}
+
+\item Clean up \code{$\sim$/autonomy\_ws} and clone your repo into \code{$\sim$/autonomy\_ws/src}
+
+  Hint: recall from {\bf Task 1.1}\\
+  Hint: use \code{git clone}
+\end{enumerate}
+
+TODO...
+
+
+\subsection{Python}
+For each of the following tasks, create a Python file under \code{<repo>/scripts} directory.
+
+{\bf Task 3.2.1 -- \code{numpy\_broadcast.py}.}
+{\bf Task 3.2.2 -- \code{scipy\_integration.py}.}
 
 \end{document}
