@@ -299,13 +299,12 @@ See \href{https://en.wikipedia.org/wiki/Shell_script}{Wikipedia} for some histor
 of the shell language. In short, this is the default language to interface with most
 UNIX terminal environments.
 
-{\bf Task 3.2.1 -- Create a cleanup script.} Create a shell script at \code{$\sim$/scripts/cleanup.sh}
-and put the following shebang to the top of the file
+{\bf Task 3.2.1 -- Create a cleanup script.} Create a shell script at
+\code{<repo>/scripts/cleanup.sh} and change the permission to make it an executable.
+You also need to add the following shebang to the top of the script.
 \begin{lstlisting}[language=sh, numbers=none]
 #!/usr/bin/sh
 \end{lstlisting}
-Similar to the Python scripts, this shebang is required to tell the OS how to find the
-correct shell interpreter when executing it.
 
 {\bf Task 3.2.2 -- Write the cleanup script.} This script will be used to quickly cleanup
 your workspace at the end of each section. Edit \code{cleanup.sh} to achieve
@@ -323,9 +322,9 @@ gh auth logout
 \section{Cleanup}
 
 {\bf Task 4.1 -- Upload changes to GitHub.} Commit and push all changes to a new branch
-and create a PR.
+and create a PR and name it ``Section 1''.
 
-{\bf Task 4.2 -- Cleanup.} Run \code{$\sim$/<repo>/scripts/cleanup.sh} to clean up
+{\bf Task 4.2 -- Cleanup.} Run \code{cleanup.sh} to clean up
 your workspace for the next section.
 
 \end{document}
