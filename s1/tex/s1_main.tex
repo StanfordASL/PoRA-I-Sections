@@ -28,6 +28,9 @@
   basicstyle={\small\ttfamily},
   commentstyle=\color{teal},
   keywordstyle=\color{orange},
+  stringstyle=\color{violet},
+  showstringspaces=false,
+  showspaces=false,
   frame=single,
   % Line numbers
   xleftmargin={0.75cm},
@@ -143,24 +146,30 @@ importantly, keep track of a history of code changes for any type of software de
 We will guide you through creating a Git repository and share with you some common workflows
 when working collaboratively with multiple people on the same repository.
 
-{\bf Task 2.1 -- Create a Github account.} Go to \url{https://github.com} and create an
+{\bf Task 2.1 -- Create a GitHub account.} Go to \url{https://github.com} and create an
 account with your university email if you have not yet done so before.
 
-{\bf Task 2.2 -- Setup a Github repository.} Create a new repository with the
-name \code{<repo>} you picked earlier. Follow the guide on you newly created Github project page
-to initialize \code{$\sim$/autonomy\_ws/src/<repo>} as a git repository and push the README
-to Github.
+{\bf Task 2.2 -- GitHub authentication.} Use the following command and follow the prompts
+to authenticate the terminal with your GitHub account.
+\begin{lstlisting}[language=sh, numbers=none]
+gh auth login -w
+\end{lstlisting}
 
-{\bf Task 2.3 -- Add collaborators.} Go to project setting in Github and add your teammates
+{\bf Task 2.3 -- Setup a GitHub repository.} Create a \boxed{\textbf{private}}
+new repository with the name \code{<repo>} you picked earlier. Follow the guide on
+you newly created GitHub project page to initialize \code{$\sim$/autonomy\_ws/src/<repo>}
+as a git repository and push the README to GitHub.
+
+{\bf Task 2.4 -- Add collaborators.} Go to project setting in GitHub and add your teammates
 as collaborators to the repository you just created.
 
-{\bf Task 2.4 -- Add group info by creating a PR.} Use the following steps as a guide
+{\bf Task 2.5 -- Add group info by creating a PR.} Use the following steps as a guide
 \begin{enumerate}
   \item Create a new branch.
   \item Add a new file named \code{team.txt} and edit it to include all SUNetIDs of
     your team members (separated by newlines).
   \item Commit and push the new file to the new branch.
-  \item Create a pull request from the Github project page
+  \item Create a pull request from the GitHub project page
   \item Review the changes and merge it back to \code{main} branch.
 \end{enumerate}
 
@@ -172,80 +181,151 @@ git fetch             # sync remote branch (does not change local files)
 git pull              # sync remote branch and also update local files
 git clone <url>       # clone git repo from <url> to the current directory
 git checkout <branch> # switch to <branch>
+git add .             # add all files in the current directory
+git add <file or dir> # add a single file or directory
+git add -u            # add all tracked files
+git commit -m "<msg>" # commit all added changes to the local branch
 \end{lstlisting}
 
 \item {\bf On \code{main} branch.}
 \begin{lstlisting}[language=sh]
-git checkout -b <branch>  # create a new feature branch named <branch>
+git push                  # push commited changes to main branch
+git checkout -b <branch>  # create and switch to a new branch
 \end{lstlisting}
 
 \item {\bf On a feature branch.}
 \begin{lstlisting}[language=sh]
-git add .                   # add all files in the current directory
-git add -u                  # add all tracked files
-git commit -m "<some msg>"  # commit all added changes to the local branch
 git push -u origin <branch> # 1st push on a newly created local branch
-git push                    # push commited changes to Github
 git merge origin/main       # sync with the latest main branch
 \end{lstlisting}
 \end{enumerate}
 
 \section{Executables}
-All executables (or apps) are just files with the \code{x} permission turned on. Here
+All executables are just files with the \code{x} permission turned on. Here
 we focus on two scripting languages, Python and Shell, which you will use the most
 to build up your robot autonomy stack.
 
-\subsection{Shell}
-See \href{https://en.wikipedia.org/wiki/Shell_script}{Wikipedia} for some histories 
-of the shell language. In short, this is the default language to interface with most 
-UNIX terminal environments.
-
-{\bf Task 3.1.1 -- Create a setup script.} Create a shell script at \code{$\sim$/scripts/setup.sh}
-and put the following shebang to the top of the file
-\begin{lstlisting}[language=sh, numbers=none]
-#!/usr/bin/sh
-\end{lstlisting}
-The shebang is to tell the OS the find the correct shell interpreter when executing it.
-
-{\bf Task 3.1.2 -- Write the setup script.} This script will be used to quickly setup
-your ROS2 workspace at the beginning of future sections. Edit \code{setup.sh} to achieve
-the following functionalities:
-
-\begin{enumerate}
-\item Login to your Github account -- you can add the following line to your shell script
-\begin{lstlisting}[language=sh, numbers=none]
-gh auth login -w -p https
-\end{lstlisting}
-
-\item Clean up \code{$\sim$/autonomy\_ws} and clone your repo into \code{$\sim$/autonomy\_ws/src}
-
-  Hint: recall from {\bf Task 1.1}\\
-  Hint: use \code{git clone}
-\end{enumerate}
-
-TODO...
-
-
 \subsection{Python}
-For each of the following tasks, 
-\begin{enumerate}
-\item Create a Python file under \code{<repo>/scripts} directory.
+Python is the main programming language for this course. In this section, we will
+guide you through how to properly create a Python executable. You will need to repeat
+the same process later when creating your own ROS2 nodes.
 
-\item Make sure to also add the following shebang to the top of each Python file.
-\begin{lstlisting}[language=sh, numbers=none]
+{\bf Task 3.1.1 -- Create a Python executable.}
+
+\begin{enumerate}
+\item Create a Python file at \code{<repo>/scripts/section1.py}.
+
+\item Edit the file and use the following code as a start-up template
+\begin{lstlisting}[language=Python]
 #!/usr/bin/env python3
+
+# add import and helper functions here
+
+if __name__ == "__main__":
+    # code goes here
 \end{lstlisting}
+
+The first line, a.k.a the shebang, is always required for the OS to find the correct
+Python interpreter to execute this file. Shell scripts will require a different
+shebang (see Section~\ref{sec:shell}).
 
 \item Change the permission of the file to make it an executable.
 
     Hint: use \code{chmod}.
+
+\item Check that the permission of the file is indeed correct by running the following command,
+\begin{lstlisting}[language=sh, numbers=none]
+ls -l <path to section1.py>
+\end{lstlisting}
+and see that the \code{x} permission is indeed turned on for the file.
+
 \end{enumerate}
 
+{\bf Task 3.1.2 -- Execute it!} Add something simple to the file
+(e.g. \code{print("hello world")}), and then try to execute the file by
+writing the full path to \code{section1.py} and hit return.
 
-{\bf Task 3.2.1 -- \code{numpy\_broadcast.py}.}
+Note: if you are currently in the \code{<repo>/scripts} directory in your terminal,
+you cannot just type \code{section1.py} and run the code. Instead, you need to
+type \code{./section1.py}.
 
-{\bf Task 3.2.2 -- \code{matplotlib\_viz.py}.}
+{\bf Task 3.1.3 -- Learn about \code{numpy} matmul operator}
+Import numpy as \code{np} in your Python script and
+add the following snippet to the main block to generate two random matrices.
+\begin{lstlisting}[language=Python]
+np.random.seed(42)
+A = np.random.normal(size=(4, 4))
+B = np.random.normal(size=(4, 2))
+\end{lstlisting}
+Write code to compute and print out the matrix product $A \cdot B$
+using the Python matmul operator -- \code{@}. The result should match the following
+\begin{lstlisting}[language=Python, numbers=none]
+array([[ 0.67459114, -1.96480447],
+       [ 2.81615463, -1.19285965],
+       [-0.72781678, -0.14561428],
+       [-1.07385636,  3.96873247]])
+\end{lstlisting}
 
-TODO: description of each task
+{\bf Task 3.1.3 -- Learn about \code{numpy} slicing and broadcasting.} Add the following
+snippet to the main block to generate a batch of size-10 vectors.
+\begin{lstlisting}[language=Python]
+np.random.seed(42)
+x = np.random.normal(size=(4, 10))
+\end{lstlisting}
+Write code to compute for a L2 distance matrix among the vectors. Let $D$ denote
+such matrix, then it can be defined with
+\begin{gather}
+  D_{ij} = \|x_i - x_j\|_2.
+\end{gather}
+\textbf{Do NOT use for loops}.
+
+The results should match the following
+\begin{lstlisting}[language=Python, numbers=none]
+array([[0.        , 5.12541489, 4.30214487, 4.95259829],
+       [5.12541489, 0.        , 2.69591513, 4.74784078],
+       [4.30214487, 2.69591513, 0.        , 4.52181487],
+       [4.95259829, 4.74784078, 4.52181487, 0.        ]])
+\end{lstlisting}
+
+Hints:
+\begin{enumerate}
+  \item \code{np.linalg.norm} could be useful.
+  \item Some intermediate variable broadcasts to a shape of (4, 4, 10).
+  \item (Optional) A clever math trick can reduce the broadcast size to (4, 4).
+\end{enumerate}
+
+\subsection{Shell}\label{sec:shell}
+See \href{https://en.wikipedia.org/wiki/Shell_script}{Wikipedia} for some histories
+of the shell language. In short, this is the default language to interface with most
+UNIX terminal environments.
+
+{\bf Task 3.2.1 -- Create a cleanup script.} Create a shell script at \code{$\sim$/scripts/cleanup.sh}
+and put the following shebang to the top of the file
+\begin{lstlisting}[language=sh, numbers=none]
+#!/usr/bin/sh
+\end{lstlisting}
+Similar to the Python scripts, this shebang is required to tell the OS how to find the
+correct shell interpreter when executing it.
+
+{\bf Task 3.2.2 -- Write the cleanup script.} This script will be used to quickly cleanup
+your workspace at the end of each section. Edit \code{cleanup.sh} to achieve
+the following functionalities:
+
+\begin{enumerate}
+\item Logout your GitHub account -- you can add the following line to your shell script
+\begin{lstlisting}[language=sh, numbers=none]
+gh auth logout
+\end{lstlisting}
+
+\item Remove your workspace directory \code{$\sim$/autonomy\_ws}.
+\end{enumerate}
+
+\section{Cleanup}
+
+{\bf Task 4.1 -- Upload changes to GitHub.} Commit and push all changes to a new branch
+and create a PR.
+
+{\bf Task 4.2 -- Cleanup.} Run \code{$\sim$/<repo>/scripts/cleanup.sh} to clean up
+your workspace for the next section.
 
 \end{document}
